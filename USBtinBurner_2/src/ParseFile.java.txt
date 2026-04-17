@@ -1,0 +1,85 @@
+package diasteca.winapp.client;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+private ArrayList<SREC> alSREC;
+
+private boolean parseSREC(File sfile)
+{	
+	boolean retval = false;
+
+	if(sfile != null && sfile.exists())
+	{
+		try
+		{	
+			RecordNum = 0;
+			alSREC = new ArrayList<>();
+			BufferedReader br = new BufferedReader(new FileReader(sfile));
+
+			try
+			{
+				String line = br.readLine();
+				while (line != null) {
+					if(line.startsWith("S1") || line.startsWith("S2") || line.startsWith("S3"))
+					{   
+						SREC newSrec = new SREC(line);
+						if(!isSRECDataEmpty(newSrec.data))
+						{
+							alSREC.add(newSrec);
+							RecordNum++;
+						}
+					}
+					line = br.readLine();
+				}
+			}
+			finally
+			{
+				if(br != null)
+					br.close();	
+			}
+				
+			retval = true;
+		}
+		catch(SecurityException se)
+		{
+			lblOutput.setText("parseSREC SecurityException: \n" + se.getMessage());
+			ExitProcedure(true);
+			retval = false;
+		}
+		catch(NullPointerException npe)
+		{
+			lblOutput.setText("parseSREC NullPointerException: \n" + npe.getMessage());
+			ExitProcedure(true);
+			retval = false;
+		}
+		catch(FileNotFoundException fnfe)
+		{
+			lblOutput.setText("parseSREC FileNotFoundException: \n" + fnfe.getMessage());
+			ExitProcedure(true);
+			retval = false;
+		}
+		catch(IOException ioe)
+		{
+			lblOutput.setText("parseSREC IOException: \n" + ioe.getMessage());
+			ExitProcedure(true);
+			retval = false;
+		}
+	}
+	return retval;	
+}
+
+private boolean isSRECDataEmpty(String data)
+{
+	for(char c : data.toCharArray())
+	{
+		if(!Character.toString(c).toLowerCase().equals("f"))
+		{
+			return false;
+		}	
+	}
+	return true;
+}

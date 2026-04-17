@@ -1,0 +1,8 @@
+INDEX VERSION 1.134+C:\Users\filippo.cerchi\Desktop\USBtinBurnerArun\.metadata\.plugins\org.eclipse.jdt.core
+331872841.index
+1865797976.index
+2203915952.index
+3008065205.index
+1004419330.index
+2745675038.index
+3573364310.index
